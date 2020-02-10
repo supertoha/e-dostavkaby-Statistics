@@ -87,8 +87,8 @@ function buildPriceChangeChart(priceItems, productList)
                 
                 if(!isNaN(parseFloat(product.price)) && productPoints.length === 0)
                 {
-                    var productPricePerQuantity = parseFloat(product.price)/priceItem.quantity;
-                    productPoints.push({y : productPricePerQuantity, x : new Date() });
+                    var productPrice = parseFloat(product.price);
+                    productPoints.push({y : productPrice, x : new Date() });
                 }   
                 
                 productName = priceItem.title;
