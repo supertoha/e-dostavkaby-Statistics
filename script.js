@@ -8,7 +8,7 @@ async function getData(ajaxurl) {
 async function getProductInfo(ajaxurl, productId)
 {
     const itemData = await getData(ajaxurl);
-    var categoryName =  $('.breadcrumbs', itemData).children('a').eq(2).text();
+    var categoryName =  $('.breadcrumbs > ol > li:nth-child(3) > a > span', itemData).text();
     var price = $('.price meta', itemData).attr('content');
     
     return {url : ajaxurl, category : categoryName, id : productId, price : price};
@@ -183,7 +183,7 @@ function findCategory(productList, productUrl)
 }
 
 function buildMoneyPerCategory(priceItems, productList)
-{    
+{
     var categories = [];
     var itemSumm = 0;
     for(let i=0;i<priceItems.length;i++)
@@ -193,10 +193,13 @@ function buildMoneyPerCategory(priceItems, productList)
         if(isNullOrEmpty(productPriceItem.url))
             continue;
         
+        if(productPriceItem.price === 'undefined')
+            continue;
+        
         var category = findCategory(productList, productPriceItem.url);
         
         if(isNullOrEmpty(category))
-            continue;
+            continue;        
         
         if(typeof categories[category] === 'undefined')
             categories[category] = 0;
@@ -204,8 +207,7 @@ function buildMoneyPerCategory(priceItems, productList)
         categories[category] += productPriceItem.price;       
         itemSumm += productPriceItem.price;
     }
-    
-    
+
     var dataPoints = [];
     for (curCategory in categories) 
     {
@@ -289,7 +291,7 @@ async function buildStat()
     for (let i=0; i<numbersCount; i++)
     {
         var bascketUrl = $(numbers[i]).attr('href');               
-        const bascketData = await getData(bascketUrl)
+        const bascketData = await getData(bascketUrl);
         var progress = 100*i/numbersCount;
         $('#progressbar').progressbar({ value:  progress});
 
